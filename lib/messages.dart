@@ -23,17 +23,17 @@ class Version {
   }
 }
 
-class CgmblekitApi {
-  /// Constructor for [CgmblekitApi].  The [binaryMessenger] named argument is
+class Api {
+  /// Constructor for [Api].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  CgmblekitApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  Api({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
   Future<Version> getPlatformVersion() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CgmblekitApi.getPlatformVersion', const StandardMessageCodec(), binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Api.getPlatformVersion', const StandardMessageCodec(), binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {

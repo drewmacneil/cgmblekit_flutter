@@ -13,10 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString * string;
 @end
 
-@protocol CBKCgmblekitApi
+@protocol CBKApi
 -(nullable CBKVersion *)getPlatformVersion:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void CBKCgmblekitApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKCgmblekitApi> _Nullable api);
+extern void CBKApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKApi> _Nullable api);
 
 NS_ASSUME_NONNULL_END

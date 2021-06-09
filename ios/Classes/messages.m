@@ -41,11 +41,11 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 }
 @end
 
-void CBKCgmblekitApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKCgmblekitApi> api) {
+void CBKApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKApi> api) {
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.CgmblekitApi.getPlatformVersion"
+        messageChannelWithName:@"dev.flutter.pigeon.Api.getPlatformVersion"
         binaryMessenger:binaryMessenger];
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {

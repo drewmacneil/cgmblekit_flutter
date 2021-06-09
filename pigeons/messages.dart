@@ -5,6 +5,6 @@ class Version {
 }
 
 @HostApi()
-abstract class CgmblekitApi {
+abstract class Api {
   Version getPlatformVersion();
 }
