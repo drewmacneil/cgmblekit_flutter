@@ -1,14 +1,16 @@
 import Flutter
 import UIKit
 
-public class SwiftCgmblekitFlutterPlugin: NSObject, FlutterPlugin {
+public class SwiftCgmblekitFlutterPlugin: NSObject, FlutterPlugin, CBKCgmblekitApi {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "cgmblekit_flutter", binaryMessenger: registrar.messenger())
-    let instance = SwiftCgmblekitFlutterPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
+    let messenger : FlutterBinaryMessenger = registrar.messenger()
+    let api : CBKCgmblekitApi = SwiftCgmblekitFlutterPlugin()
+    CBKCgmblekitApiSetup(messenger, api)
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
+  public func getPlatformVersion(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> CBKVersion? {
+    let version = CBKVersion.init()
+    version.string = "iOS " + UIDevice.current.systemVersion
+    return version
   }
 }
