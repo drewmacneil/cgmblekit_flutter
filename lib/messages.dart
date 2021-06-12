@@ -7,6 +7,38 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
 import 'package:flutter/services.dart';
 
+class GlucoseSample {
+  double? quantity;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['quantity'] = quantity;
+    return pigeonMap;
+  }
+
+  static GlucoseSample decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return GlucoseSample()
+      ..quantity = pigeonMap['quantity'] as double?;
+  }
+}
+
+class Transmitter {
+  String? id;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['id'] = id;
+    return pigeonMap;
+  }
+
+  static Transmitter decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return Transmitter()
+      ..id = pigeonMap['id'] as String?;
+  }
+}
+
 class Version {
   String? string;
 
@@ -23,6 +55,26 @@ class Version {
   }
 }
 
+abstract class CallbackApi {
+  void newSample(GlucoseSample arg);
+  static void setup(CallbackApi? api) {
+    {
+      const BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.CallbackApi.newSample', StandardMessageCodec());
+      if (api == null) {
+        channel.setMessageHandler(null);
+      } else {
+        channel.setMessageHandler((Object? message) async {
+          assert(message != null, 'Argument for dev.flutter.pigeon.CallbackApi.newSample was null. Expected GlucoseSample.');
+          final GlucoseSample input = GlucoseSample.decode(message!);
+          api.newSample(input);
+          return;
+        });
+      }
+    }
+  }
+}
+
 class Api {
   /// Constructor for [Api].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
@@ -30,6 +82,30 @@ class Api {
   Api({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
+
+  Future<void> listenForTransmitter(Transmitter arg) async {
+    final Object encoded = arg.encode();
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.Api.listenForTransmitter', const StandardMessageCodec(), binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(encoded) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+        details: null,
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      // noop
+    }
+  }
 
   Future<Version> getPlatformVersion() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(

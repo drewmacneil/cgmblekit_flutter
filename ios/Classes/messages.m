@@ -22,9 +22,45 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
       };
 }
 
+@interface CBKGlucoseSample ()
++(CBKGlucoseSample*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
+@end
+@interface CBKTransmitter ()
++(CBKTransmitter*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
+@end
 @interface CBKVersion ()
 +(CBKVersion*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
+@end
+
+@implementation CBKGlucoseSample
++(CBKGlucoseSample*)fromMap:(NSDictionary*)dict {
+  CBKGlucoseSample* result = [[CBKGlucoseSample alloc] init];
+  result.quantity = dict[@"quantity"];
+  if ((NSNull *)result.quantity == [NSNull null]) {
+    result.quantity = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.quantity ? self.quantity : [NSNull null]), @"quantity", nil];
+}
+@end
+
+@implementation CBKTransmitter
++(CBKTransmitter*)fromMap:(NSDictionary*)dict {
+  CBKTransmitter* result = [[CBKTransmitter alloc] init];
+  result.id = dict[@"id"];
+  if ((NSNull *)result.id == [NSNull null]) {
+    result.id = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.id ? self.id : [NSNull null]), @"id", nil];
+}
 @end
 
 @implementation CBKVersion
@@ -41,7 +77,48 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 }
 @end
 
+@interface CBKCallbackApi ()
+@property (nonatomic, strong) NSObject<FlutterBinaryMessenger>* binaryMessenger;
+@end
+
+@implementation CBKCallbackApi
+- (instancetype)initWithBinaryMessenger:(NSObject<FlutterBinaryMessenger>*)binaryMessenger {
+  self = [super init];
+  if (self) {
+    _binaryMessenger = binaryMessenger;
+  }
+  return self;
+}
+
+- (void)newSample:(CBKGlucoseSample*)input completion:(void(^)(NSError* _Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.CallbackApi.newSample"
+      binaryMessenger:self.binaryMessenger];
+  NSDictionary* inputMap = [input toMap];
+  [channel sendMessage:inputMap reply:^(id reply) {
+    completion(nil);
+  }];
+}
+@end
 void CBKApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKApi> api) {
+  {
+    FlutterBasicMessageChannel *channel =
+      [FlutterBasicMessageChannel
+        messageChannelWithName:@"dev.flutter.pigeon.Api.listenForTransmitter"
+        binaryMessenger:binaryMessenger];
+    if (api) {
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        CBKTransmitter *input = [CBKTransmitter fromMap:message];
+        FlutterError *error;
+        [api listenForTransmitter:input error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
