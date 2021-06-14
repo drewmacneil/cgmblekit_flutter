@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class CBKVersion;
 
 @interface CBKGlucoseSample : NSObject
+@property(nonatomic, strong, nullable) NSNumber * timestamp;
 @property(nonatomic, strong, nullable) NSNumber * quantity;
 @end
 

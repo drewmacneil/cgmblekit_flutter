@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  double _latestGlucoseReading = -1;
+  GlucoseSample? _latestGlucoseSample;
 
   @override
   void initState() {
@@ -51,8 +51,17 @@ class _MyAppState extends State<MyApp> {
 
   void updateLatestGlucoseReading(GlucoseSample glucoseSample) {
     setState(() {
-      _latestGlucoseReading = glucoseSample.quantity!;
+      _latestGlucoseSample = glucoseSample;
     });
+  }
+
+  String _latestGlucoseSampleDescription() {
+    if (_latestGlucoseSample == null) {
+      return 'Unknown';
+    }
+    DateTime sampleTime = DateTime.fromMillisecondsSinceEpoch(
+        _latestGlucoseSample!.timestamp!.round() * 1000);
+    return '${_latestGlucoseSample!.quantity} mg/dL at $sampleTime';
   }
 
   @override
@@ -64,7 +73,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: Text(
-              'Running on: $_platformVersion\nLatest glucose: $_latestGlucoseReading'),
+              'Running on: $_platformVersion\nLatest glucose: ${_latestGlucoseSampleDescription()}'),
         ),
       ),
     );

@@ -74,8 +74,9 @@ extension SwiftCgmblekitFlutterPlugin: CGMManagerDelegate {
         os_log("cgmManager.hasNew")
         switch readingResult {
         case .newData(let values):
-            let value = values[0]
+            let value = values.last!
             let sample = CBKGlucoseSample()
+            sample.timestamp = value.date.timeIntervalSince1970 as NSNumber
             sample.quantity = value.quantity.doubleValue(for: HKUnit(from: "mg/dL")) as NSNumber
             DispatchQueue.main.async {
                 self.callbackApi.newSample(sample, completion: { (error: Error?) -> Void in

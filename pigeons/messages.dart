@@ -10,6 +10,10 @@ class Transmitter {
 
 class GlucoseSample {
   // TODO: bring in the other fields.
+  // Seconds since epoch.
+  double? timestamp;
+  // Glucose value in mg/dL.
+  //   TODO: does the transmitter always return values in this unit?
   double? quantity;
 }
 

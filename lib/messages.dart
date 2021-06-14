@@ -8,10 +8,12 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 import 'package:flutter/services.dart';
 
 class GlucoseSample {
+  double? timestamp;
   double? quantity;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['timestamp'] = timestamp;
     pigeonMap['quantity'] = quantity;
     return pigeonMap;
   }
@@ -19,6 +21,7 @@ class GlucoseSample {
   static GlucoseSample decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return GlucoseSample()
+      ..timestamp = pigeonMap['timestamp'] as double?
       ..quantity = pigeonMap['quantity'] as double?;
   }
 }

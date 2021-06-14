@@ -38,6 +38,10 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 @implementation CBKGlucoseSample
 +(CBKGlucoseSample*)fromMap:(NSDictionary*)dict {
   CBKGlucoseSample* result = [[CBKGlucoseSample alloc] init];
+  result.timestamp = dict[@"timestamp"];
+  if ((NSNull *)result.timestamp == [NSNull null]) {
+    result.timestamp = nil;
+  }
   result.quantity = dict[@"quantity"];
   if ((NSNull *)result.quantity == [NSNull null]) {
     result.quantity = nil;
@@ -45,7 +49,7 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
   return result;
 }
 -(NSDictionary*)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.quantity ? self.quantity : [NSNull null]), @"quantity", nil];
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.timestamp ? self.timestamp : [NSNull null]), @"timestamp", (self.quantity ? self.quantity : [NSNull null]), @"quantity", nil];
 }
 @end
 
