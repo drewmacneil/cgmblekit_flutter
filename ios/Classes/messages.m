@@ -30,10 +30,6 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 +(CBKTransmitter*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
-@interface CBKVersion ()
-+(CBKVersion*)fromMap:(NSDictionary*)dict;
--(NSDictionary*)toMap;
-@end
 
 @implementation CBKGlucoseSample
 +(CBKGlucoseSample*)fromMap:(NSDictionary*)dict {
@@ -64,20 +60,6 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 }
 -(NSDictionary*)toMap {
   return [NSDictionary dictionaryWithObjectsAndKeys:(self.id ? self.id : [NSNull null]), @"id", nil];
-}
-@end
-
-@implementation CBKVersion
-+(CBKVersion*)fromMap:(NSDictionary*)dict {
-  CBKVersion* result = [[CBKVersion alloc] init];
-  result.string = dict[@"string"];
-  if ((NSNull *)result.string == [NSNull null]) {
-    result.string = nil;
-  }
-  return result;
-}
--(NSDictionary*)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.string ? self.string : [NSNull null]), @"string", nil];
 }
 @end
 
@@ -117,22 +99,6 @@ void CBKApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKApi> api) {
         FlutterError *error;
         [api listenForTransmitter:input error:&error];
         callback(wrapResult(nil, error));
-      }];
-    }
-    else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.Api.getPlatformVersion"
-        binaryMessenger:binaryMessenger];
-    if (api) {
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        FlutterError *error;
-        CBKVersion *output = [api getPlatformVersion:&error];
-        callback(wrapResult([output toMap], error));
       }];
     }
     else {

@@ -42,22 +42,6 @@ class Transmitter {
   }
 }
 
-class Version {
-  String? string;
-
-  Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['string'] = string;
-    return pigeonMap;
-  }
-
-  static Version decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return Version()
-      ..string = pigeonMap['string'] as String?;
-  }
-}
-
 abstract class CallbackApi {
   void newSample(GlucoseSample arg);
   static void setup(CallbackApi? api) {
@@ -107,29 +91,6 @@ class Api {
       );
     } else {
       // noop
-    }
-  }
-
-  Future<Version> getPlatformVersion() async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Api.getPlatformVersion', const StandardMessageCodec(), binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-        details: null,
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return Version.decode(replyMap['result']!);
     }
   }
 }

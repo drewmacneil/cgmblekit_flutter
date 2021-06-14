@@ -10,11 +10,6 @@ class CgmblekitFlutter {
     CallbackApi.setup(CallbackApiImpl(cb));
     return await _api.listenForTransmitter(Transmitter()..id = id);
   }
-
-  static Future<String?> get platformVersion async {
-    Version version = await _api.getPlatformVersion();
-    return version.string;
-  }
 }
 
 class CallbackApiImpl extends CallbackApi {

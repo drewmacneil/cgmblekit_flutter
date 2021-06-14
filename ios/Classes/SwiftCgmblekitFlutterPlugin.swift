@@ -24,12 +24,6 @@ public class SwiftCgmblekitFlutterPlugin: NSObject, FlutterPlugin, CBKApi {
         cgmManager.cgmManagerDelegate = self
         cgmManager.delegateQueue = .main
     }
-    
-    public func getPlatformVersion(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> CBKVersion? {
-        let version = CBKVersion.init()
-        version.string = "iOS " + UIDevice.current.systemVersion
-        return version
-    }
 }
 
 // MARK: CGMManagerDelegate

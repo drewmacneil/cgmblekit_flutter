@@ -9,7 +9,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class CBKGlucoseSample;
 @class CBKTransmitter;
-@class CBKVersion;
 
 @interface CBKGlucoseSample : NSObject
 @property(nonatomic, strong, nullable) NSNumber * timestamp;
@@ -20,17 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString * id;
 @end
 
-@interface CBKVersion : NSObject
-@property(nonatomic, copy, nullable) NSString * string;
-@end
-
 @interface CBKCallbackApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
 - (void)newSample:(CBKGlucoseSample*)input completion:(void(^)(NSError* _Nullable))completion;
 @end
 @protocol CBKApi
 -(void)listenForTransmitter:(CBKTransmitter*)input error:(FlutterError *_Nullable *_Nonnull)error;
--(nullable CBKVersion *)getPlatformVersion:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void CBKApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<CBKApi> _Nullable api);

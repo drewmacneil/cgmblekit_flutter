@@ -1,9 +1,5 @@
 import 'package:pigeon/pigeon.dart';
 
-class Version {
-  String? string;
-}
-
 class Transmitter {
   String? id;
 }
@@ -20,7 +16,6 @@ class GlucoseSample {
 @HostApi()
 abstract class Api {
   void listenForTransmitter(Transmitter transmitter);
-  Version getPlatformVersion();
 }
 
 @FlutterApi()
