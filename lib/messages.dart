@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 class GlucoseSample {
   double? timestamp;
-  double? quantity;
+  int? quantity;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -22,7 +22,7 @@ class GlucoseSample {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return GlucoseSample()
       ..timestamp = pigeonMap['timestamp'] as double?
-      ..quantity = pigeonMap['quantity'] as double?;
+      ..quantity = pigeonMap['quantity'] as int?;
   }
 }
 

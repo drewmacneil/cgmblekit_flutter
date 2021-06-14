@@ -71,7 +71,7 @@ extension SwiftCgmblekitFlutterPlugin: CGMManagerDelegate {
             let value = values.last!
             let sample = CBKGlucoseSample()
             sample.timestamp = value.date.timeIntervalSince1970 as NSNumber
-            sample.quantity = value.quantity.doubleValue(for: HKUnit(from: "mg/dL")) as NSNumber
+            sample.quantity = NSNumber(value: Int(value.quantity.doubleValue(for: HKUnit(from: "mg/dL"), withRounding: true)))
             DispatchQueue.main.async {
                 self.callbackApi.newSample(sample, completion: { (error: Error?) -> Void in
                     })

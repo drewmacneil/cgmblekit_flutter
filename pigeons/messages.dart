@@ -10,7 +10,7 @@ class GlucoseSample {
   double? timestamp;
   // Glucose value in mg/dL.
   //   TODO: does the transmitter always return values in this unit?
-  double? quantity;
+  int? quantity;
 }
 
 @HostApi()
