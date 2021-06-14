@@ -1,4 +1,5 @@
 import 'package:cgmblekit_flutter/messages.dart';
+import 'package:cgmblekit_flutter/messages_extensions.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -33,15 +34,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  String _latestGlucoseSampleDescription() {
-    if (_latestGlucoseSample == null) {
-      return 'Unknown';
-    }
-    DateTime sampleTime = DateTime.fromMillisecondsSinceEpoch(
-        _latestGlucoseSample!.timestamp!.round() * 1000);
-    return '${_latestGlucoseSample!.quantity} mg/dL at $sampleTime';
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,7 +42,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('cgmblekit_flutter example'),
         ),
         body: Center(
-          child: Text('Latest glucose: ${_latestGlucoseSampleDescription()}'),
+          child: Text('Latest glucose: ${_latestGlucoseSample?.description()}'),
         ),
       ),
     );
